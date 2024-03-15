@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 // ignore: must_be_immutable
 class AppButton extends StatelessWidget {
   final double heightBut;
+  final bool isloding;
   final GestureTapCallback onPressed;
   final double sizewidth;
   final double butTextSize;
@@ -22,7 +23,8 @@ class AppButton extends StatelessWidget {
       this.heightBut = 0,
       required this.buttonName,
       required this.onPressed,
-      required this.sizewidth})
+      required this.sizewidth,
+      required this.isloding})
       : super(key: key);
 
   @override
@@ -37,11 +39,15 @@ class AppButton extends StatelessWidget {
             borderRadius:
                 BorderRadius.circular(butRadius == 0 ? 18 : butRadius)),
         child: Center(
-          child: AppText(
-              color: textColor,
-              fontWeight: FontWeight.w500,
-              size: butTextSize == 0 ? 17.sp : butTextSize,
-              text: buttonName),
+          child: isloding
+              ? const CircularProgressIndicator(
+                  color: Colors.white,
+                )
+              : AppText(
+                  color: textColor,
+                  fontWeight: FontWeight.w500,
+                  size: butTextSize == 0 ? 17.sp : butTextSize,
+                  text: buttonName),
         ),
       ),
     );

@@ -59,7 +59,7 @@ class CustumTextFeild extends StatefulWidget {
   final Widget? suxifIcon;
   final sufixIconOnTap;
   final bool isdark;
-
+  final TextEditingController? controller;
   final GestureTapCallback onPressed;
   final String Function(String?)? validator;
   final Function(String)? onchangevalue;
@@ -77,13 +77,16 @@ class CustumTextFeild extends StatefulWidget {
   final double contwidth;
   final double contheight;
   final int maxlenght;
+  final double radius;
   TextInputType? mydata = TextInputType.text;
   int? maxlenthcontroller = 100;
   CustumTextFeild({
     super.key,
+    this.controller,
     this.focusNod,
     this.iconPrefix,
     this.showPass = true,
+    this.radius = 20,
     this.readOnly = false,
     this.sufixIconOnTap,
     this.suxifIcon,
@@ -111,19 +114,23 @@ class CustumTextFeild extends StatefulWidget {
 class _CustumTextFeildState extends State<CustumTextFeild> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: widget.contheight == 0
-          ? 100.h >= 795
-              ? 7.h
-              : 8.h
-          : widget.contheight,
+    return Container(
+      constraints: BoxConstraints(
+          maxHeight: 30.h,
+          minHeight: widget.contheight == 0
+              ? 100.h >= 795
+                  ? 9.h
+                  : 8.h
+              : widget.contheight),
       width: widget.contwidth == 0 ? 100.w : widget.contwidth,
       child: TextFormField(
+          controller: widget.controller,
           focusNode: widget.focusNod,
           maxLines: widget.maxlenght,
           onEditingComplete: widget.oneditingComplete,
           enabled: widget.enable,
           readOnly: widget.readOnly,
+          minLines: 1,
           obscureText:
               widget.password == true ? widget.showPass : widget.password,
           inputFormatters: widget.onlyNumbers == true
@@ -141,15 +148,20 @@ class _CustumTextFeildState extends State<CustumTextFeild> {
           ),
           keyboardType: widget.mydata,
           decoration: InputDecoration(
+            helperText: widget.labtext,
+            hintStyle: GoogleFonts.roboto(
+              // fontSize: 12.sp,
+              color: widget.isdark ? Colors.white : Colors.black,
+            ),
             suffixIcon: widget.suxifIcon,
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(widget.radius),
                 borderSide: BorderSide(
                   width: 1.5,
                   color: widget.isdark ? Colors.white : Colors.black,
                 )),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(widget.radius),
                 borderSide: BorderSide(
                   width: 1.5,
                   color: widget.isdark ? Colors.white : Colors.black,
@@ -158,148 +170,6 @@ class _CustumTextFeildState extends State<CustumTextFeild> {
             labelStyle: GoogleFonts.roboto(
               fontSize: 12.sp,
               color: widget.isdark ? Colors.white : Colors.black,
-            ),
-          ),
-          onTap: widget.onPressed),
-    );
-  }
-}
-
-class CustumTextFeild2 extends StatefulWidget {
-  final Widget? suxifIcon;
-  final sufixIconOnTap;
-  TextEditingController controller;
-  final GestureTapCallback onPressed;
-  final String Function(String?)? validator;
-  final Function(String)? onchangevalue;
-  // Icon iconsuffix;
-  // Icon iconPrefix;
-  Function()? oneditingComplete;
-  FocusNode? focusNod;
-  final bool onlyNumbers;
-  final String hintText;
-  final String labtext;
-  final bool password;
-  final bool enable;
-  bool showPass = true;
-  final double contwidth;
-  final double contheight;
-  final int maxlenght;
-  TextInputType? mydata = TextInputType.text;
-  int? maxlenthcontroller = 100;
-  CustumTextFeild2({
-    super.key,
-    this.focusNod,
-    this.sufixIconOnTap,
-    this.suxifIcon,
-    this.enable = true,
-    this.labtext = "",
-    this.mydata,
-    this.oneditingComplete,
-    required this.onPressed,
-    this.maxlenthcontroller,
-    required this.controller,
-    required this.password,
-    required this.hintText,
-    this.validator,
-    this.onchangevalue,
-    this.contwidth = 0,
-    this.onlyNumbers = false,
-    this.contheight = 0,
-    this.maxlenght = 1,
-  });
-
-  @override
-  State<CustumTextFeild2> createState() => _CustumTextFeild2State();
-}
-
-class _CustumTextFeild2State extends State<CustumTextFeild2> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: widget.contheight == 0 ? 7.h : widget.contheight,
-      width: widget.contwidth == 0 ? 100.w : widget.contwidth,
-      child: TextFormField(
-          focusNode: widget.focusNod,
-          maxLines: widget.maxlenght,
-          onEditingComplete: widget.oneditingComplete,
-          enabled: widget.enable,
-          controller: widget.controller,
-          obscureText:
-              widget.password == true ? widget.showPass : widget.password,
-          inputFormatters: widget.onlyNumbers == true
-              ? [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  LengthLimitingTextInputFormatter(widget.maxlenthcontroller)
-                ]
-              : [LengthLimitingTextInputFormatter(widget.maxlenthcontroller)],
-          validator: widget.validator,
-          onChanged: widget.onchangevalue,
-          style: GoogleFonts.roboto(
-            fontWeight: FontWeight.w600,
-            fontSize: 11.sp,
-            color: Colors.black,
-          ),
-          keyboardType: widget.mydata,
-          decoration: InputDecoration(
-            suffixIcon: /* widget.password == true
-                ? IconButton(
-                    onPressed: () {
-                      log("message");
-                      setState(() {
-                        if (widget.showPass == false) {
-                          widget.showPass = true;
-                        } else {
-                          widget.showPass = false;
-                        }
-                      });
-                      log(widget.showPass.toString());
-                      // setState(() {
-                      //   widget.showPass = false;
-                      // });
-                      // log("$_showPass");
-                    },
-                    icon: Icon(
-                      widget.showPass == true
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: Colors.black,
-                    ))
-                : */
-                widget.suxifIcon,
-            hintText: widget.labtext,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            floatingLabelAlignment: FloatingLabelAlignment.start,
-            labelStyle: GoogleFonts.roboto(color: Colors.black),
-            labelText: widget.hintText,
-            hintStyle: GoogleFonts.roboto(
-              fontSize: 12.sp,
-              color: Colors.black,
-            ),
-
-            // const TextStyle(
-
-            // ),
-            disabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                borderSide: BorderSide(
-                  width: 1.5,
-                  color: Colors.black,
-                )),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                borderSide: BorderSide(
-                  width: 1.5,
-                  color: Colors.black,
-                )),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                borderSide: BorderSide(
-                  width: 1.5,
-                  color: Colors.black,
-                )),
-            errorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(width: 1),
             ),
           ),
           onTap: widget.onPressed),
@@ -321,7 +191,8 @@ class DropDownTextFeild extends StatefulWidget {
   final bool enable;
   final double contwidth;
   final List<String> myListData;
-
+  final double radius;
+  final bool isdark;
   TextInputType? mydata = TextInputType.text;
   int? maxlenthcontroller = 100;
   DropDownTextFeild({
@@ -330,10 +201,12 @@ class DropDownTextFeild extends StatefulWidget {
     this.onChanged,
     this.useonchange = false,
     this.labtext = "",
+    this.radius = 5,
     this.mydata,
     required this.onPressed,
     this.maxlenthcontroller,
     required this.controller,
+    required this.isdark,
     required this.password,
     required this.hintText,
     this.validator,
@@ -360,56 +233,59 @@ class _DropDownTextFeildState extends State<DropDownTextFeild> {
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
-                hintText: widget.labtext,
+                hintText: widget.controller.text.isEmpty ? "Please Select" : "",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelStyle: GoogleFonts.roboto(color: Colors.white),
+                labelStyle: GoogleFonts.roboto(
+                  color: widget.isdark ? Colors.white : Colors.black,
+                ),
                 labelText: widget.hintText,
                 hintStyle: GoogleFonts.roboto(
                   fontSize: 12.sp,
-                  color: Colors.white,
+                  color: widget.isdark ? Colors.white : Colors.black,
                 ),
                 disabledBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(widget.radius)),
                     borderSide: BorderSide(
                       width: 1.5,
-                      color: Colors.white,
+                      color: widget.isdark ? Colors.white : Colors.black,
                     )),
                 focusedBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    borderSide: BorderSide(
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(widget.radius)),
+                    borderSide: const BorderSide(
                       width: 1.5,
                       color: Colors.white,
                     )),
                 enabledBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(widget.radius)),
                     borderSide: BorderSide(
                       width: 1.5,
-                      color: Colors.white,
+                      color: widget.isdark ? Colors.white : Colors.black,
                     )),
                 errorBorder: const OutlineInputBorder(
                   borderSide: BorderSide(width: 1),
                 ),
               ),
-              isEmpty: false,
+              isEmpty: true,
               child: DropdownButton(
                 underline: const SizedBox(),
                 isExpanded: true,
                 alignment: AlignmentDirectional.topEnd,
                 icon: Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: Colors.white,
+                  color: widget.isdark ? Colors.white : Colors.black,
                 ),
-                iconDisabledColor: Colors.white,
-                iconEnabledColor: Colors.white,
+                iconDisabledColor: widget.isdark ? Colors.white : Colors.black,
+                iconEnabledColor: widget.isdark ? Colors.white : Colors.black,
                 style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 11.sp,
-                    color: Colors.white),
-                hint: AppText(
-                    fontWeight: FontWeight.w600,
-                    size: 12.sp,
-                    text: ' '), // Not necessary for Option 1
+                  fontWeight: FontWeight.w600,
+                  fontSize: 11.sp,
+                  color: widget.isdark ? Colors.white : Colors.black,
+                ),
+                // Not necessary for Option 1
                 value: myController,
 
                 onChanged: widget.useonchange == true
@@ -426,7 +302,9 @@ class _DropDownTextFeildState extends State<DropDownTextFeild> {
                     child: Text(
                       location,
                       style: GoogleFonts.roboto(
-                          color: Colors.white, backgroundColor: Colors.black),
+                          color: widget.isdark ? Colors.white : Colors.black,
+                          backgroundColor:
+                              widget.isdark ? Colors.black : Colors.white),
                     ),
                   );
                 }).toList(),

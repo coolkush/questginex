@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:questginix/auth/cubit/logincubit/logincubit.dart';
 import 'package:questginix/auth/cubit/logincubit/loginstate.dart';
+import 'package:questginix/auth/design/forgotpass.dart';
 import 'package:questginix/common/appbutton.dart';
 import 'package:questginix/common/apptext.dart';
 import 'package:questginix/common/textfeild.dart';
@@ -73,12 +74,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 4.h.heightBox,
                 CustumTextFeild(
                     onPressed: () {},
+                    onchangevalue: (p0) {
+                      context.read<LoginCubit>().updateemail(p0);
+                    },
                     password: false,
                     hintText: "Email",
                     isdark: context.read<LoginCubit>().isDarkMode()),
                 2.h.heightBox,
                 CustumTextFeild(
                     onPressed: () {},
+                    onchangevalue: (p0) {
+                      context.read<LoginCubit>().updatepassword(p0);
+                    },
                     password: state.showpass,
                     suxifIcon: Icon(
                       state.showpass == true
@@ -92,28 +99,54 @@ class _LoginScreenState extends State<LoginScreen> {
                     }),
                     hintText: "password",
                     isdark: context.read<LoginCubit>().isDarkMode()),
+                widget.index == 1 ? Container() : 2.h.heightBox,
+                widget.index == 1
+                    ? Container()
+                    : CustumTextFeild(
+                        onPressed: () {},
+                        onchangevalue: (p0) {
+                          context.read<LoginCubit>().updatepasswordconf(p0);
+                        },
+                        suxifIcon: Icon(
+                          state.showconpass == true
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: context.read<LoginCubit>().isDarkMode()
+                              ? Colors.white
+                              : Colors.black,
+                        ).onTap(() {
+                          context.read<LoginCubit>().updateshowconfpass();
+                        }),
+                        password: state.showconpass,
+                        hintText: "Confirm Password",
+                        isdark: context.read<LoginCubit>().isDarkMode()),
                 2.h.heightBox,
-                CustumTextFeild(
-                    onPressed: () {},
-                    suxifIcon: Icon(
-                      state.showconpass == true
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: context.read<LoginCubit>().isDarkMode()
-                          ? Colors.white
-                          : Colors.black,
-                    ).onTap(() {
-                      context.read<LoginCubit>().updateshowconfpass();
-                    }),
-                    password: state.showconpass,
-                    hintText: "Confirm Password",
-                    isdark: context.read<LoginCubit>().isDarkMode()),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const Forgotpassword()));
+                      },
+                      child: AppText(
+                          color: context.read<LoginCubit>().isDarkMode()
+                              ? Colors.white
+                              : Colors.black,
+                          fontWeight: FontWeight.w400,
+                          size: 16.sp,
+                          text: "Forgot Password")),
+                ),
                 4.h.heightBox,
                 AppButton(
+                    isloding: state.apistate == ApiState.loding,
                     butRadius: 25,
                     textColor: Colors.white,
                     buttonName: "Get Started",
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<LoginCubit>().loginaction(context);
+                    },
                     sizewidth: 50.w)
               ],
             ).pOnly(left: 4.w, right: 4.w),

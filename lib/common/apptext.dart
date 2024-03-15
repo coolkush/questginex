@@ -18,7 +18,7 @@ class AppText extends StatelessWidget {
     required this.size,
     required this.text,
     this.maxlin = 1,
-    this.color = Colors.white,
+    this.color = Colors.black,
   }) : super(key: key);
 
   @override
@@ -27,6 +27,35 @@ class AppText extends StatelessWidget {
         textAlign: align,
         maxLines: maxlin,
         overflow: hello,
+        style: GoogleFonts.abhayaLibre(
+            color: color, fontSize: size, fontWeight: fontWeight));
+  }
+}
+
+// ignore: must_be_immutable
+class AppTextPara extends StatelessWidget {
+  final double size;
+  final FontWeight fontWeight;
+  final Color color;
+  final String text;
+
+  // final TextOverflow hello;
+  final TextAlign? align;
+  const AppTextPara({
+    Key? key,
+    this.align = TextAlign.justify,
+    // this.hello = TextOverflow.ellipsis,
+    required this.fontWeight,
+    required this.size,
+    required this.text,
+    this.color = Colors.black,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        textAlign: align,
+        // overflow: hello,
         style: GoogleFonts.abhayaLibre(
             color: color, fontSize: size, fontWeight: fontWeight));
   }
